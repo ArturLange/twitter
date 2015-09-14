@@ -1,0 +1,9 @@
+# ~/.tmuxinator/elearning.yml
+
+name: elearning
+root: {{ project_path }}
+pre_window: source {{ project_venv_path }}/bin/activate
+
+windows:
+  - site: python {{ site_path }}/manage.py runserver 0.0.0.0:3456
+

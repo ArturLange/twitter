@@ -1,0 +1,19 @@
+---
+- name: Install tmuxinator
+  become: yes
+  command: gem install tmuxinator
+
+- name: mkdir tmuxinator directory
+  file: path="~/.tmuxinator" state=directory
+
+- name: symlink tmuxinator config
+  template: src=tmuxinator.conf.jinja2 dest=~/.tmuxinator/elearning.yml
+
+- name: Create run alias
+  lineinfile:
+    dest: ~/.bashrc
+    regexp: alias run
+    line: alias run="mux start elearning"
+
+- name: Migrate db
+  django_manage: virtualenv={{ project_venv_path }} command=migrate app_path={{ site_path }}
