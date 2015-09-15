@@ -1,5 +1,4 @@
 project_path: /vagrant
 project_venv_path: "{{ project_path }}/venv"
 project_name: twitter
-django_path:  "{{ project_path }}/django-startproject"
-site_path: "{{ project_path }}/{{ project_name }}"
+pyramid_path: "{{ project_path }}/{{ project_name }}"

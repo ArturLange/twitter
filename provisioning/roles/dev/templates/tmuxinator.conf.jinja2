@@ -1,9 +1,9 @@
-# ~/.tmuxinator/elearning.yml
+# ~/.tmuxinator/twitter.yml
 
-name: elearning
+name: twitter
 root: {{ project_path }}
 pre_window: source {{ project_venv_path }}/bin/activate
 
 windows:
-  - site: python {{ site_path }}/manage.py runserver 0.0.0.0:3456
+  - site: "pserve {{ project_path }}/development.ini --reload"
 

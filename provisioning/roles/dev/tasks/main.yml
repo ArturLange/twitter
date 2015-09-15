@@ -7,13 +7,13 @@
   file: path="~/.tmuxinator" state=directory
 
 - name: symlink tmuxinator config
-  template: src=tmuxinator.conf.jinja2 dest=~/.tmuxinator/elearning.yml
+  template: src=tmuxinator.conf.jinja2 dest=~/.tmuxinator/twitter.yml
 
 - name: Create run alias
   lineinfile:
     dest: ~/.bashrc
     regexp: alias run
-    line: alias run="mux start elearning"
+    line: alias run="mux start twitter"
 
-- name: Migrate db
-  django_manage: virtualenv={{ project_venv_path }} command=migrate app_path={{ site_path }}
+- name: Initialize dev DB
+  command: chdir={{ project_path }} {{ project_venv_path }}/bin/initialize_twitter_db development.ini
