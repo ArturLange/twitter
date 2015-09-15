@@ -13,8 +13,8 @@
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
 
-### SQLite3
-*.sqlite3
+### SQLite
+*.sqlite
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
