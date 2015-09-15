@@ -1,5 +1,6 @@
 import sqlalchemy as sa
 from sqlalchemy import func
+from sqlalchemy.orm import relationship
 from sqlalchemy_utils.types.password import PasswordType
 
 from twitter import Base
@@ -14,6 +15,7 @@ class User(Base):
     email = sa.Column(sa.Unicode, nullable=False, unique=True)
     password = sa.Column(PasswordType(schemes=['pbkdf2_sha512']), nullable=False)
     is_admin = sa.Column(sa.Boolean, default=False)
+    posts = relationship("Post", backref="creator")
 
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         self.first_name = first_name
@@ -28,3 +30,11 @@ class User(Base):
         email = email if email is not None else ''
         by_email = func.lower(cls.email) == email.lower()
         return query.filter(by_email).first()
+
+
+class Post(Base):
+    __tablename__ = 'posts'
+    id = sa.Column(sa.Integer, primary_key=True)
+    date_created = sa.Column(sa.types.DateTime, nullable=False)
+    creator_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
+    content = sa.Column(sa.Text)
