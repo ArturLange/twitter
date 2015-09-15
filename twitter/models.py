@@ -17,12 +17,16 @@ class User(Base):
     is_admin = sa.Column(sa.Boolean, default=False)
     posts = relationship("Post", backref="creator")
 
-    def __init__(self, first_name, last_name, email, password, is_admin=False):
+    def __init__(self, username, email, password, first_name='', last_name='', is_admin=False):
+        self.username = username
         self.first_name = first_name
         self.last_name = last_name
         self.email = email.lower()
         self.password = password
         self.is_admin = is_admin
+
+    def __repr__(self):
+        return str(dict(username=self.username, email=self.email))
 
     @classmethod
     def get_by_email(cls, request, email):
