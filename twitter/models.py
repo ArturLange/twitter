@@ -35,6 +35,13 @@ class User(Base):
         by_email = func.lower(cls.email) == email.lower()
         return query.filter(by_email).first()
 
+    @classmethod
+    def get_by_username(cls, request, username):
+        query = request.db.query(cls)
+        username = username if username is not None else ''
+        by_username = cls.username == username
+        return query.filter(by_username).first()
+
 
 class Post(Base):
     __tablename__ = 'posts'
