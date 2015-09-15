@@ -43,14 +43,27 @@ class User(Base):
         return query.filter(by_username).first()
 
 
+posts_hashtags = sa.Table('posts_hashtags', Base.metadata,
+                          sa.Column('post_id', sa.Integer, sa.ForeignKey('posts.id')),
+                          sa.Column('hashtag_id', sa.Integer, sa.ForeignKey('hashtags.id'))
+                          )
+
+
 class Post(Base):
     __tablename__ = 'posts'
     id = sa.Column(sa.Integer, primary_key=True)
     date_created = sa.Column(sa.types.DateTime, nullable=False)
-    creator_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
+    creator_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'), nullable=False)
     content = sa.Column(sa.Text)
+    hashtags = relationship('Hashtag', secondary=posts_hashtags, backref='posts')
 
     def __init__(self, date_created, creator_id, content):
         self.content = content
         self.date_created = date_created
         self.creator_id = creator_id
+
+
+class Hashtag(Base):
+    __tablename__ = 'hashtags'
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.Unicode, nullable=False, unique=True)
