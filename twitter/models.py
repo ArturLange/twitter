@@ -49,3 +49,8 @@ class Post(Base):
     date_created = sa.Column(sa.types.DateTime, nullable=False)
     creator_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
     content = sa.Column(sa.Text)
+
+    def __init__(self, date_created, creator_id, content):
+        self.content = content
+        self.date_created = date_created
+        self.creator_id = creator_id
