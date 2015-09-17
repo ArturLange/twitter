@@ -14,12 +14,27 @@
 
 <body>
 
+<nav>
+    <a href=/><span class="font-normal">Home</span></a>
+    <a href=/posts><span class="font-normal">Posts</span></a>
+    {% if logged_in %}
+        <a href=/post><span class="font-normal">New post</span></a>
+        <a href=/account/{{ logged_in.id }}><span class="font-normal">@{{ logged_in.username }}</span></a>
+        <a href=/logout><span class="font-normal">Logout</span></a>
+    {% else %}
+        <a href=/register><span class="font-normal">Register</span></a>
+        <a href=/login><span class="font-normal">Login</span></a>
+    {% endif %}
+</nav>
+<br>
+
 {% for post in posts %}
     <div class="content">
         <a href=/account/{{ post[1].id }} style="text-decoration:none"><span
                 class="font-normal">{{ post[1].name }}</span> @{{ post[1].username }}</a>
+        {{ post[0].date_created.date() }}
 
-        <p>{{ post[0].date_created.date() }} <span class="font-normal">{{ post[0].content }}</span></p>
+        <p><span class="font-normal">{{ post[0].content }}</span></p>
     </div>
 {% endfor %}
 

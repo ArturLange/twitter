@@ -13,29 +13,43 @@
 </head>
 
 <body>
-<nav>
-    <h1><a href=/account/{{ user.id }} style="text-decoration:none"><span
-            class="font-normal">{{ user.name }}</span> @{{ user.username }}</a></h1>
 
-    <form tag="Follow" method="post">
-        <div1>
-            <input type="submit" value="Follow"/>
-        </div1>
-    </form>
+<nav>
+    <a href=/><span class="font-normal">Home</span></a>
+    <a href=/posts><span class="font-normal">Posts</span></a>
+    {% if logged_in %}
+        <a href=/post><span class="font-normal">New post</span></a>
+        <a href=/account/{{ logged_in.id }}><span class="font-normal">@{{ logged_in.username }}</span></a>
+        <a href=/logout><span class="font-normal">Logout</span></a>
+    {% else %}
+        <a href=/register><span class="font-normal">Register</span></a>
+        <a href=/login><span class="font-normal">Login</span></a>
+    {% endif %}
 </nav>
+<br>
+
+<h1><a href=/account/{{ user.id }} style="text-decoration:none"><span
+        class="font-normal">{{ user.name }}</span> @{{ user.username }}</a></h1>
+
+<form tag="Follow" method="post">
+    <div1>
+        <input type="submit" value="Follow"/>
+    </div1>
+</form>
+
 
 <br><br><br>
 
-<div class="content">
-    {% for post in user.posts %}
-        <div class="content">
-            <a href=/account/{{ user.id }} style="text-decoration:none"><span
-                    class="font-normal">{{ user.name }}</span> @{{ user.username }}</a>
 
-            <p><span class="font-normal">{{ post.content }}</span></p>
-        </div>
-    {% endfor %}
-</div>
+{% for post in user.posts %}
+    <div class="content">
+        <a href=/account/{{ user.id }} style="text-decoration:none"><span
+                class="font-normal">{{ user.name }}</span> @{{ user.username }}</a>
+        {{ post.date_created.date() }}
+
+        <p><span class="font-normal">{{ post.content }}</span></p>
+    </div>
+{% endfor %}
 
 
 </body>

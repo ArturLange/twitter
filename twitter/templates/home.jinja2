@@ -8,11 +8,25 @@
     <meta name="author" content="ArturLange">
     <link rel="shortcut icon" href="${request.static_url('twitter:static/pyramid-16x16.png')}">
 
-    <title>Main page</title>
+    <title>Home page</title>
 
 </head>
 
 <body>
+
+<nav>
+    <a href=/><span class="font-normal">Home</span></a>
+    <a href=/posts><span class="font-normal">Posts</span></a>
+    {% if logged_in %}
+        <a href=/post><span class="font-normal">New post</span></a>
+        <a href=/account/{{ logged_in.id }}><span class="font-normal">@{{ logged_in.username }}</span></a>
+        <a href=/logout><span class="font-normal">Logout</span></a>
+    {% else %}
+        <a href=/register><span class="font-normal">Register</span></a>
+        <a href=/login><span class="font-normal">Login</span></a>
+    {% endif %}
+</nav>
+<br>
 
 {% for post in posts %}
     <div class="content">
