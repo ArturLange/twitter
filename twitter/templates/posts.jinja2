@@ -31,12 +31,21 @@
 
 {% for post in posts %}
     <div class="content">
+        {% if post[0].creator_id != post[0].original_creator_id %}
+        <p><span class="font-normal">Retweeted by {{ post[0].creator.username }}</span></p>
+        {% endif %}
         <a href=/account/{{ post[1].id }} style="text-decoration:none"><span
                 class="font-normal">{{ post[1].name }}</span> @{{ post[1].username }}</a>
         {{ post[0].date_created.date() }}
 
         <p><span class="font-normal">{{ post[0].content }}</span></p>
+
+        <form tag="Retweet" method="post">
+            <input type="hidden" name="post_id" value={{ post[0].id }}>
+            <input type="submit" value="Retweet"/>
+        </form>
     </div>
+    <br>
 {% endfor %}
 
 </body>

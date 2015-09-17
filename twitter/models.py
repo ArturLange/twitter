@@ -22,7 +22,6 @@ class User(Base):
     email = sa.Column(sa.Unicode, nullable=False, unique=True)
     password = sa.Column(PasswordType(schemes=['pbkdf2_sha512']), nullable=False)
     is_admin = sa.Column(sa.Boolean, default=False)
-    posts = relationship("Post", backref="creator")
     followers = relationship("User", secondary=follows, primaryjoin=id == follows.c.followed_id,
                              secondaryjoin=id == follows.c.follower_id, backref='followed')
 
@@ -62,13 +61,19 @@ class Post(Base):
     id = sa.Column(sa.Integer, primary_key=True)
     date_created = sa.Column(sa.types.DateTime, nullable=False)
     creator_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'), nullable=False)
+    original_creator_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'), nullable=False)
     content = sa.Column(sa.Text)
     hashtags = relationship('Hashtag', secondary=posts_hashtags, backref='posts')
 
-    def __init__(self, creator_id, content):
+    creator = relationship('User', backref='posts',
+                           primaryjoin="Post.creator_id == User.id")
+    original_creator = relationship('User', primaryjoin="Post.original_creator_id == User.id")
+
+    def __init__(self, original_creator_id, content, creator_id=None):
         self.content = content
         self.date_created = datetime.now()
-        self.creator_id = creator_id
+        self.original_creator_id = original_creator_id
+        self.creator_id = creator_id if creator_id else original_creator_id
         hashtags = re.findall(r"#[\w]+", content)
         names = [hashtag[1:] for hashtag in hashtags]
         with transaction.manager:

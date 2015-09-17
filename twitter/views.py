@@ -18,6 +18,13 @@ def logged_in(request):
         return User.get_by_username(request, request.authenticated_userid)
 
 
+def retweet(request, original_post_id):
+    user = User.get_by_username(request, request.authenticated_userid)
+    original_post = request.db.query(Post).filter(Post.id == original_post_id).first()
+    return Post(original_creator_id=original_post.original_creator_id, content=original_post.content,
+                creator_id=user.id)
+
+
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home_view(request):
     user = User.get_by_username(request, request.authenticated_userid)
@@ -43,7 +50,7 @@ def post_view(request):
     if user is None:
         raise httpexceptions.HTTPUnauthorized()
     if request.method == "POST":
-        post = Post(content=request.params['post_content'], creator_id=user.id)
+        post = Post(content=request.params['post_content'], original_creator_id=user.id)
         request.db.add(post)
         request.db.commit()
     return {'logged_in': logged_in(request)}
@@ -51,8 +58,10 @@ def post_view(request):
 
 @view_config(route_name='posts_view', renderer='templates/posts.jinja2')
 def posts_view(request):
+    if request.method == "POST":
+        request.db.add(retweet(request, request.params['post_id']))
     posts = request.db.query(Post).all()
-    postsusers = [(post, request.db.query(User).filter(post.creator_id == User.id).first()) for post in posts]
+    postsusers = [(post, request.db.query(User).filter(post.original_creator_id == User.id).first()) for post in posts]
     return {'posts': postsusers, 'logged_in': logged_in(request)}
 
 
@@ -62,7 +71,7 @@ def hashtag_view(request):
     if hashtag is None:
         return {'logged_in': logged_in(request)}
     posts = Post.get_by_hashtag(request, hashtag)
-    postsusers = [(post, request.db.query(User).filter(post.creator_id == User.id).first()) for post in posts]
+    postsusers = [(post, request.db.query(User).filter(post.original_creator_id == User.id).first()) for post in posts]
     return {'posts': postsusers, 'logged_in': logged_in(request)}
 
 
