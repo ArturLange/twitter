@@ -66,6 +66,12 @@ def hashtag_view(request):
     return {'posts': postsusers, 'logged_in': logged_in(request)}
 
 
+@view_config(route_name='hashtag_list_view', renderer='templates/hashtags.jinja2')
+def hashtag_list_view(request):
+    hashtags = request.db.query(Hashtag).all()
+    return {'hashtags': hashtags, 'logged_in': logged_in(request)}
+
+
 @view_config(route_name='login_view', renderer='templates/login.jinja2')
 def login_view(request):
     if request.method == "POST":

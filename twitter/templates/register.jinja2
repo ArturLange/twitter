@@ -15,8 +15,9 @@
 <body>
 
 <nav>
-    <a href=/><span class="font-normal">Home</span></a>
+    <a href=/ ><span class="font-normal">Home</span></a>
     <a href=/posts><span class="font-normal">Posts</span></a>
+    <a href=/hashtags><span class="font-normal">Hashtags</span></a>
     {% if logged_in %}
         <a href=/post><span class="font-normal">New post</span></a>
         <a href=/account/{{ logged_in.id }}><span class="font-normal">@{{ logged_in.username }}</span></a>
@@ -30,11 +31,11 @@
 
 
 <form tag="Register" method="post">
-    <div align="center">
-        Username *: <input type="username" name="username"/>
-        Password *: <input type="password" name="password"/>
-        Email *: <input type="email" name="email"/>
-        Name: <input type="name" name="name"/>
+    <div>
+        Username *: <input type="username" name="username"/><br>
+        Password *: <input type="password" name="password"/><br>
+        Email *: <input type="email" name="email"/><br>
+        Name: <input type="name" name="name"/><br>
         <input type="submit" value="Submit"/>
     </div>
 </form>

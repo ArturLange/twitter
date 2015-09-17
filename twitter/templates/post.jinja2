@@ -17,6 +17,7 @@
 <nav>
     <a href=/><span class="font-normal">Home</span></a>
     <a href=/posts><span class="font-normal">Posts</span></a>
+    <a href=/hashtags><span class="font-normal">Hashtags</span></a>
     {% if logged_in %}
         <a href=/post><span class="font-normal">New post</span></a>
         <a href=/account/{{ logged_in.id }}><span class="font-normal">@{{ logged_in.username }}</span></a>
@@ -35,7 +36,7 @@
 {% endif %}
 
 <form tag="New post" method="post">
-    <div align="center">
+    <div>
         Post: <input type="text" name="post_content"/>
         <input type="submit" value="Submit"/>
     </div>

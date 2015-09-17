@@ -51,5 +51,6 @@ def main(global_config, **settings):
     config.add_route('login_view', '/login')
     config.add_route('logout_view', '/logout')
     config.add_route('hashtag_view', '/hashtag/{hashtag}')
+    config.add_route('hashtag_list_view', '/hashtags')
     config.scan()
     return config.make_wsgi_app()

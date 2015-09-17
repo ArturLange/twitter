@@ -8,7 +8,7 @@
     <meta name="author" content="ArturLange">
     <link rel="shortcut icon" href="${request.static_url('twitter:static/pyramid-16x16.png')}">
 
-    <title>Login page</title>
+    <title>Posts page</title>
 
 </head>
 
@@ -29,13 +29,11 @@
 </nav>
 <br>
 
-<form tag="Login" method="post">
-    <div>
-        Username *: <input type="username" name="username"/><br>
-        Password *: <input type="password" name="password"/><br>
-        <input type="submit" value="Login"/>
+{% for hashtag in hashtags %}
+    <div class="content">
+        <a href=/hashtag/{{ hashtag.name }}><span class="font-normal">#{{ hashtag.name }}</span></a>
     </div>
-</form>
+{% endfor %}
 
 </body>
 </html>
