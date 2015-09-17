@@ -11,13 +11,22 @@ def follow(request, followed):
     followed.followers.append(follower)
 
 
+def logged_in(request):
+    if request.authenticated_userid is None:
+        return False
+    else:
+        return User.get_by_username(request, request.authenticated_userid)
+
+
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home_view(request):
     user = User.get_by_username(request, request.authenticated_userid)
+    if user is None:
+        return {'logged_in': logged_in(request)}
     posts = []
     for creator in user.followed:
         posts.extend(Post.get_by_creator(request, creator))
-    return {'posts': posts}
+    return {'posts': posts, 'logged_in': logged_in(request)}
 
 
 @view_config(route_name='account', renderer='templates/account.jinja2')
@@ -25,7 +34,7 @@ def account_view(request):
     user = request.db.query(User).filter(User.id == request.matchdict['user_id']).first()
     if request.method == "POST":
         follow(request, user)
-    return {'user': user, 'params': dict(request.params)}
+    return {'user': user, 'logged_in': logged_in(request)}
 
 
 @view_config(route_name='post_view', renderer='templates/post.jinja2')
@@ -37,22 +46,24 @@ def post_view(request):
         post = Post(content=request.params['post_content'], creator_id=user.id)
         request.db.add(post)
         request.db.commit()
-    return {}
+    return {'logged_in': logged_in(request)}
 
 
 @view_config(route_name='posts_view', renderer='templates/posts.jinja2')
 def posts_view(request):
     posts = request.db.query(Post).all()
     postsusers = [(post, request.db.query(User).filter(post.creator_id == User.id).first()) for post in posts]
-    return {'posts': postsusers}
+    return {'posts': postsusers, 'logged_in': logged_in(request)}
 
 
 @view_config(route_name='hashtag_view', renderer='templates/posts.jinja2')
 def hashtag_view(request):
     hashtag = request.db.query(Hashtag).filter(Hashtag.name == request.matchdict['hashtag']).first()
+    if hashtag is None:
+        return {'logged_in': logged_in(request)}
     posts = Post.get_by_hashtag(request, hashtag)
     postsusers = [(post, request.db.query(User).filter(post.creator_id == User.id).first()) for post in posts]
-    return {'posts': postsusers}
+    return {'posts': postsusers, 'logged_in': logged_in(request)}
 
 
 @view_config(route_name='login_view', renderer='templates/login.jinja2')
@@ -65,7 +76,7 @@ def login_view(request):
             token = remember(request, username)
             return Response(headerlist=token)
         raise httpexceptions.HTTPUnauthorized()
-    return {'auser': request.authenticated_userid}
+    return {'auser': request.authenticated_userid, 'logged_in': logged_in(request)}
 
 
 @view_config(route_name='logout_view', renderer='templates/logout.jinja2')
@@ -76,7 +87,7 @@ def logout_view(request):
         else:
             raise httpexceptions.HTTPBadRequest()
         return Response(headerlist=token)
-    return {'auser': request.authenticated_userid}
+    return {'auser': request.authenticated_userid, 'logged_in': logged_in(request)}
 
 
 @view_config(route_name='register_view', renderer='templates/register.jinja2')
@@ -94,5 +105,5 @@ def register_view(request):
             request.db.commit()
         except IntegrityError:
             raise httpexceptions.HTTPBadRequest()
-        return {'status': 'ok'}
-    return {}
+        return {'status': 'ok', 'logged_in': logged_in(request)}
+    return {'logged_in': logged_in(request)}
