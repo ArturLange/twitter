@@ -50,6 +50,8 @@ def posts_view(request):
 @view_config(route_name='hashtag_view', renderer='templates/posts.jinja2')
 def hashtag_view(request):
     hashtag = request.db.query(Hashtag).filter(Hashtag.name == request.matchdict['hashtag']).first()
+    if hashtag is None:
+        return {}
     posts = Post.get_by_hashtag(request, hashtag)
     postsusers = [(post, request.db.query(User).filter(post.creator_id == User.id).first()) for post in posts]
     return {'posts': postsusers}
