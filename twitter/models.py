@@ -14,17 +14,15 @@ class User(Base):
     __tablename__ = "users"
     id = sa.Column(sa.Integer, primary_key=True)
     username = sa.Column(sa.Unicode, nullable=False, unique=True)
-    first_name = sa.Column(sa.Unicode)
-    last_name = sa.Column(sa.Unicode)
+    name = sa.Column(sa.Unicode)
     email = sa.Column(sa.Unicode, nullable=False, unique=True)
     password = sa.Column(PasswordType(schemes=['pbkdf2_sha512']), nullable=False)
     is_admin = sa.Column(sa.Boolean, default=False)
     posts = relationship("Post", backref="creator")
 
-    def __init__(self, username, email, password, first_name='', last_name='', is_admin=False):
+    def __init__(self, username, email, password, name='', is_admin=False):
         self.username = username
-        self.first_name = first_name
-        self.last_name = last_name
+        self.name = name
         self.email = email.lower()
         self.password = password
         self.is_admin = is_admin

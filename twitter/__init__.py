@@ -44,7 +44,7 @@ def main(global_config, **settings):
     config.add_request_method(db, reify=True)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
-    config.add_route('account', '/account')
+    config.add_route('account', '/account/{user_id}')
     config.add_route('post_view', '/post')
     config.add_route('posts_view', '/posts')
     config.add_route('register_view', '/register')

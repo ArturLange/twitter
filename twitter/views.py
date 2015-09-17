@@ -13,21 +13,20 @@ def my_view(request):
 
 @view_config(route_name='account', renderer='templates/account.jinja2')
 def account_view(request):
-    user = User.get_by_username(request, request.authenticated_userid)
+    user = request.db.query(User).filter(User.id == request.matchdict['user_id']).first()
     return {'user': user}
 
 
 @view_config(route_name='post_view', renderer='templates/post.jinja2')
 def post_view(request):
     user = User.get_by_username(request, request.authenticated_userid)
-    if request.method == "GET":
-        post = request.db.query(Post).filter(Post.creator_id == user.id).first()
-        return {'post': post}
+    if user is None:
+        raise httpexceptions.HTTPUnauthorized()
     if request.method == "POST":
         post = Post(content=request.params['post_content'], creator_id=user.id)
         request.db.add(post)
         request.db.commit()
-        return {'post': None}
+    return {}
 
 
 @view_config(route_name='posts_view', renderer='templates/posts.jinja2')
@@ -41,7 +40,8 @@ def posts_view(request):
 def hashtag_view(request):
     hashtag = request.db.query(Hashtag).filter(Hashtag.name == 'elo').first()
     posts = Post.get_by_hashtag(request, hashtag)
-    return {'posts': posts}
+    postsusers = [(post, request.db.query(User).filter(post.creator_id == User.id).first()) for post in posts]
+    return {'posts': postsusers}
 
 
 @view_config(route_name='login_view', renderer='templates/login.jinja2')
@@ -62,6 +62,8 @@ def logout_view(request):
     if request.method == "POST":
         if request.authenticated_userid is not None:
             token = forget(request)
+        else:
+            raise httpexceptions.HTTPBadRequest()
         return Response(headerlist=token)
     return {'auser': request.authenticated_userid}
 
@@ -70,6 +72,8 @@ def logout_view(request):
 def register_view(request):
     if request.method == "POST":
         data = request.params
+        if "" in [data['username'], data['password'], data['email']]:
+            raise httpexceptions.HTTPBadRequest('Username, password or email is missing')
         try:
             user = User(**data)
         except TypeError:
@@ -78,6 +82,6 @@ def register_view(request):
             request.db.add(user)
             request.db.commit()
         except IntegrityError:
-            raise httpexceptions.HTTPBadRequest('An account already exists for this email address.')
+            raise httpexceptions.HTTPBadRequest()
         return {'status': 'ok'}
     return {}
