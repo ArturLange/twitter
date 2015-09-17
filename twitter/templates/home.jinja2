@@ -14,7 +14,14 @@
 
 <body>
 
-<p>{{ title }}</p>
+{% for post in posts %}
+    <div class="content">
+        <a href=/account/{{ post.creator.id }} style="text-decoration:none"><span
+                class="font-normal">{{ post.creator.name }}</span> @{{ post.creator.username }}</a>
+
+        <p>{{ post.date_created.date() }} <span class="font-normal">{{ post.content }}</span></p>
+    </div>
+{% endfor %}
 
 
 </body>

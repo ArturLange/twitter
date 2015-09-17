@@ -6,15 +6,26 @@ from twitter.models import User, Post, Hashtag
 from sqlalchemy.exc import IntegrityError
 
 
+def follow(request, followed):
+    follower = User.get_by_username(request, request.authenticated_userid)
+    followed.followers.append(follower)
+
+
 @view_config(route_name='home', renderer='templates/home.jinja2')
-def my_view(request):
-    return {'title': 'twitter'}
+def home_view(request):
+    user = User.get_by_username(request, request.authenticated_userid)
+    posts = []
+    for creator in user.followed:
+        posts.extend(Post.get_by_creator(request, creator))
+    return {'posts': posts}
 
 
 @view_config(route_name='account', renderer='templates/account.jinja2')
 def account_view(request):
     user = request.db.query(User).filter(User.id == request.matchdict['user_id']).first()
-    return {'user': user}
+    if request.method == "POST":
+        follow(request, user)
+    return {'user': user, 'params': dict(request.params)}
 
 
 @view_config(route_name='post_view', renderer='templates/post.jinja2')
@@ -38,7 +49,7 @@ def posts_view(request):
 
 @view_config(route_name='hashtag_view', renderer='templates/posts.jinja2')
 def hashtag_view(request):
-    hashtag = request.db.query(Hashtag).filter(Hashtag.name == 'elo').first()
+    hashtag = request.db.query(Hashtag).filter(Hashtag.name == request.matchdict['hashtag']).first()
     posts = Post.get_by_hashtag(request, hashtag)
     postsusers = [(post, request.db.query(User).filter(post.creator_id == User.id).first()) for post in posts]
     return {'posts': postsusers}

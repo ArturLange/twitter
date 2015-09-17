@@ -1,13 +1,17 @@
 from datetime import datetime
 
 import re
-
 import sqlalchemy as sa
 from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils.types.password import PasswordType
 import transaction
 from twitter import Base, DBSession
+
+follows = sa.Table('follows', Base.metadata,
+                   sa.Column('follower_id', sa.Integer, sa.ForeignKey('users.id'), primary_key=True),
+                   sa.Column('followed_id', sa.Integer, sa.ForeignKey('users.id'), primary_key=True)
+                   )
 
 
 class User(Base):
@@ -19,6 +23,8 @@ class User(Base):
     password = sa.Column(PasswordType(schemes=['pbkdf2_sha512']), nullable=False)
     is_admin = sa.Column(sa.Boolean, default=False)
     posts = relationship("Post", backref="creator")
+    followers = relationship("User", secondary=follows, primaryjoin=id == follows.c.followed_id,
+                             secondaryjoin=id == follows.c.follower_id, backref='followed')
 
     def __init__(self, username, email, password, name='', is_admin=False):
         self.username = username
@@ -71,7 +77,6 @@ class Post(Base):
                 if hashtag is None:
                     hashtag = Hashtag(name)
                     self.hashtags.append(hashtag)
-                    DBSession.add(Hashtag(name))
                 else:
                     self.hashtags.append(hashtag)
 
@@ -80,6 +85,12 @@ class Post(Base):
         query = request.db.query(cls)
         by_hashtag = cls.hashtags.contains(hashtag)
         return query.filter(by_hashtag).all()
+
+    @classmethod
+    def get_by_creator(cls, request, creator):
+        query = request.db.query(cls)
+        by_creator = cls.creator == creator
+        return query.filter(by_creator).all()
 
 
 class Hashtag(Base):
