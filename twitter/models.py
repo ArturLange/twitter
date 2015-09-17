@@ -1,9 +1,13 @@
+from datetime import datetime
+
+import re
+
 import sqlalchemy as sa
 from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils.types.password import PasswordType
-
-from twitter import Base
+import transaction
+from twitter import Base, DBSession
 
 
 class User(Base):
@@ -57,13 +61,39 @@ class Post(Base):
     content = sa.Column(sa.Text)
     hashtags = relationship('Hashtag', secondary=posts_hashtags, backref='posts')
 
-    def __init__(self, date_created, creator_id, content):
+    def __init__(self, creator_id, content):
         self.content = content
-        self.date_created = date_created
+        self.date_created = datetime.now()
         self.creator_id = creator_id
+        hashtags = re.findall(r"#[\w]+", content)
+        names = [hashtag[1:] for hashtag in hashtags]
+        with transaction.manager:
+            for name in names:
+                hashtag = DBSession.query(Hashtag).filter(Hashtag.name == name).first()
+                if hashtag is None:
+                    hashtag = Hashtag(name)
+                    self.hashtags.append(hashtag)
+                    DBSession.add(Hashtag(name))
+                else:
+                    self.hashtags.append(hashtag)
+
+    @classmethod
+    def get_by_hashtag(cls, request, hashtag):
+        query = request.db.query(cls)
+        by_hashtag = cls.hashtags.contains(hashtag)
+        return query.filter(by_hashtag).all()
 
 
 class Hashtag(Base):
     __tablename__ = 'hashtags'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Unicode, nullable=False, unique=True)
+
+    def __init__(self, name):
+        self.name = name
+
+    @classmethod
+    def get_by_name(cls, request, name):
+        query = request.db.query(cls)
+        by_name = cls.name == name
+        return query.filter(by_name).first()

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="${request.locale_name}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="pyramid twitter application">
+    <meta name="author" content="ArturLange">
+    <link rel="shortcut icon" href="${request.static_url('twitter:static/pyramid-16x16.png')}">
+
+    <title>Login page</title>
+
+</head>
+
+<body>
+
+
+<form tag="Create Logon" method="post">
+    <div align="center">
+        Username *: <input type="username" name="username"/>
+        Password *: <input type="password" name="password"/>
+        Email *: <input type="email" name="email"/>
+        First name: <input type="name" name="first_name"/>
+        Last name: <input type="text" name="last_name"/>
+        <input type="submit" value="Submit"/>
+    </div>
+</form>
+
+</body>
+</html>
+
+
