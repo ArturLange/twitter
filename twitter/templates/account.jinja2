@@ -34,6 +34,7 @@
 
 <form tag="Follow" method="post">
     <div1>
+        <input type="hidden" name="follow" value=True>
         <input type="submit" value="Follow"/>
     </div1>
 </form>
@@ -44,12 +45,23 @@
 
 {% for post in user.posts %}
     <div class="content">
-        <a href=/account/{{ user.id }} style="text-decoration:none"><span
-                class="font-normal">{{ user.name }}</span> @{{ user.username }}</a>
+        {% if post.creator_id != post.original_creator_id %}
+            <p><span class="font-normal">Retweeted by <a
+                    href=/account/{{ post.creator_id }} style="text-decoration:none"> {{ post.creator.username }}</a></span>
+            </p>
+        {% endif %}
+        <a href=/account/{{ post.original_creator_id }} style="text-decoration:none"><span
+                class="font-normal">{{ post.original_creator.name }}</span> @{{ post.original_creator.username }}</a>
         {{ post.date_created.date() }}
 
         <p><span class="font-normal">{{ post.content }}</span></p>
+
+        <form tag="Retweet" method="post">
+            <input type="hidden" name="post_id" value={{ post.id }}>
+            <input type="submit" value="Retweet"/>
+        </form>
     </div>
+    <br>
 {% endfor %}
 
 

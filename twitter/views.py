@@ -39,8 +39,11 @@ def home_view(request):
 @view_config(route_name='account', renderer='templates/account.jinja2')
 def account_view(request):
     user = request.db.query(User).filter(User.id == request.matchdict['user_id']).first()
-    if request.method == "POST":
+    if request.method == "POST" and 'follow' in request.params:
         follow(request, user)
+    if request.method == "POST" and 'post_id' in request.params:
+        request.db.add(retweet(request, request.params['post_id']))
+        request.db.commit()
     return {'user': user, 'logged_in': logged_in(request)}
 
 
@@ -67,6 +70,8 @@ def posts_view(request):
 
 @view_config(route_name='hashtag_view', renderer='templates/posts.jinja2')
 def hashtag_view(request):
+    if request.method == "POST":
+        request.db.add(retweet(request, request.params['post_id']))
     hashtag = request.db.query(Hashtag).filter(Hashtag.name == request.matchdict['hashtag']).first()
     if hashtag is None:
         return {'logged_in': logged_in(request)}

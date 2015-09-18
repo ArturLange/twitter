@@ -32,7 +32,9 @@
 {% for post in posts %}
     <div class="content">
         {% if post[0].creator_id != post[0].original_creator_id %}
-        <p><span class="font-normal">Retweeted by {{ post[0].creator.username }}</span></p>
+            <p><span class="font-normal">Retweeted by <a
+                    href=/account/{{ post[0].creator_id }} style="text-decoration:none"> {{ post[0].creator.username }}</a></span>
+            </p>
         {% endif %}
         <a href=/account/{{ post[1].id }} style="text-decoration:none"><span
                 class="font-normal">{{ post[1].name }}</span> @{{ post[1].username }}</a>
