@@ -12,6 +12,7 @@
     - python3-dev
     - ruby
     - tmux
+    - git
 
 - name: Install/update pip & virtualenv
   become: yes
@@ -25,7 +26,17 @@
   args:
     creates: "{{ project_venv_path }}"
 
-- name: Pyramid setup (backend requirements)
-  command: "{{ project_venv_path }}/bin/python {{ project_path }}/setup.py develop"
-  args:
-    chdir: "{{ project_path }}"
+- name: Install dependencies
+  become: yes
+  pip: name={{ item }} state=latest executable=pip3 virtualenv={{ project_venv_path }}
+  with_items:
+    - django
+
+- name: Download django-registation with git (sic!)
+  become: yes
+  git: dest=/tmp/django-registration repo=https://github.com/ubernostrum/django-registration.git
+
+- name: Install django-registration
+  become: yes
+  command: "{{ project_venv_path }}/bin/python /tmp/django-registration/setup.py install"
+
