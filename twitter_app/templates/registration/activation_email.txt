@@ -1,0 +1,2 @@
+Here is your activation link:
+<a href="{% url 'registration_activate' %}/{{ activation_key }}">{{ activation_key }}</a>
