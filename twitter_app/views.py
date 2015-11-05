@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.utils import timezone
 from django.views import generic
 
@@ -13,6 +14,10 @@ class IndexView(generic.ListView):
 
 
 class UserProfileView(generic.DetailView):
-    model = User
     template_name = 'twitter_app/profile.html'
-    context_object_name = 'user_profile'
+
+    def get(self, request, pk):
+        user = User.objects.get(id=pk)
+        posts = Post.objects.get_by_user_id(user.id)
+        context = {'user_profile': user, 'posts': posts}
+        return render(request, self.template_name, context)
