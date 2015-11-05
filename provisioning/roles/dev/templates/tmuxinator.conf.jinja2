@@ -5,5 +5,5 @@ root: {{ project_path }}
 pre_window: source {{ project_venv_path }}/bin/activate
 
 windows:
-  - site: "pserve {{ project_path }}/development.ini --reload"
+  - site: "{{ project_path }}/manage.py runserver 0.0.0.0:3456"
 

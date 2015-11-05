@@ -14,6 +14,3 @@
     dest: ~/.bashrc
     regexp: alias run
     line: alias run="mux start twitter"
-
-- name: Initialize dev DB
-  command: chdir={{ project_path }} {{ project_venv_path }}/bin/initialize_twitter_db development.ini
