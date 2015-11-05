@@ -1,17 +1,19 @@
-a:link {
-  color: white;
+a.post_creator {
+  font-size: large;
 }
 
-a:visited {
-  color: #cccccc;
+.posts {
+  list-style: none;
 }
 
-a:hover {
-  color: #AAA;
+.post {
+  background-color: #fff;
+  border: thick;
+  cursor: pointer;
 }
 
-a:active {
-  color: #999;
+.post:hover {
+  background-color: #f5f8fa;
 }
 
 input[type="text"] {
@@ -42,15 +44,23 @@ div[id="sidebar"] {
 }
 
 div[id="content"] {
-  align-self: center;
-  align-content: center;
-  background-color: #5b80b2;
-  border-radius: 10px 35px 10px 35px;
+  background-color: #c7c9cb;
+  border-radius: 5px;
   margin: 10px;
   padding: 20px;
   width: 98.5%;
+  align-self: center;
+  align-content: center;
+}
+
+div.post {
+  border-radius: 3px;
 }
 
 input[type="submit"] {
   color: #000;
+}
+
+body {
+  padding-top: 70px;
 }

@@ -9,7 +9,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_posts_list'
 
     def get_queryset(self):
-        return Post.objects.filter(date_created__lte=timezone.now()).order_by('-date_created')[:5]
+        return Post.objects.filter(date_created__lte=timezone.now()).order_by('-date_created')[:20]
 
 
 class UserProfileView(generic.DetailView):

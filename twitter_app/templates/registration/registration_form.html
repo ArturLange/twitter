@@ -8,27 +8,23 @@
 
 <form method="post" action="{% url 'registration_register' %}">
   {% csrf_token %}
-  <table>
-    <tr>
-      <td>{{ form.username.label_tag }}</td>
-      <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-      <td>{{ form.email.label_tag }}</td>
-      <td>{{ form.email }}</td>
-    </tr>
-    <tr>
-      <td>{{ form.password1.label_tag }}</td>
-      <td>{{ form.password1 }}</td>
-    </tr>
-    <tr>
-      <td>{{ form.password2.label_tag }}</td>
-      <td>{{ form.password2 }}</td>
-    </tr>
-  </table>
-
-  <input type="submit" value="register"/>
-  <input type="hidden" name="next" value="{% url 'registration_complete' %}"/>
+  <div class="form-group">
+    <label for="username_input">{{ form.username.label_tag }}</label>
+    <input name="username" type="text" class="form-control" id="username_input" placeholder="Username">
+  </div>
+  <div class="form-group">
+    <label for="username_input">{{ form.email.label_tag }}</label>
+    <input name="email" type="email" class="form-control" id="email_input" placeholder="Email">
+  </div>
+  <div class="form-group">
+    <label for="password1_input">{{ form.password1.label_tag }}</label>
+    <input name="password1" type="password" class="form-control" id="password1_input" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="password2_input">{{ form.password2.label_tag }}</label>
+    <input name="password2" type="password" class="form-control" id="password2_input" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-default">Register</button>
 </form>
 
 

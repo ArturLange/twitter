@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% if latest_posts_list %}
-    <ul>
-      {% for post in latest_posts_list %}
-        <li><a href="{% url 'index' %}">{{ post }}</a></li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No polls are available.</p>
-  {% endif %}
+{% if latest_posts_list %}
+
+<ul class="posts">
+  {% for post in latest_posts_list %}
+  <li>
+    <div class="post">
+      <a class="post_creator" href="{% url 'profile' pk=post.creator.pk %}">{{ post.creator }}</a><br>
+      <p class="post_content">{{ post.content }}</p>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No posts are available.</p>
+{% endif %}
 {% endblock content %}
