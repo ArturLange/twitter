@@ -4,29 +4,52 @@
   {% load staticfiles %}
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'twitter_app/style.css' %}"/>
+  <link rel="shortcut icon" href="{% static 'twitter_app/favicon.ico' %}"/>
   <title>{% block title %}Twitter{% endblock title %}</title>
 </head>
 
 <body>
-<div id="sidebar" class="container">
-  <div class="row">
-    <div class="col-md-8">
-      {% block sidebar %}
-      <ul>
-        <li><a href="/twitter">Home</a></li>
-        <li><a href="/admin/">Admin dashboard</a></li>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'index' %}">Twitter</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-left">
+        {% if user.is_staff %}
+        <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
+        {% endif %}
       </ul>
-      {% endblock sidebar %}
-    </div>
-    <div class="col-md-4">
-      {% if user.is_authenticated %}
-      <a href="{% url 'index' %}">{{ user }}</a>
-      {% else %}
-      <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
-      {% endif %}
-    </div>
-  </div>
-</div>
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">{{ user }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Profile</a></li>
+            <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li><a href="{% url 'registration_register' %}">Register</a></li>
+        <li><a href="{% url 'auth_login' %}">Login</a></li>
+        {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
 
 <div id="content" class="container">
   {% block content %}
