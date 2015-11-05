@@ -1,0 +1,57 @@
+a:link {
+  color: white;
+}
+
+a:visited {
+  color: #cccccc;
+}
+
+a:hover {
+  color: #AAA;
+}
+
+a:active {
+  color: #999;
+}
+
+input[type="text"] {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="email"] {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="password"] {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+div {
+  alignment: center;
+}
+
+div[id="sidebar"] {
+  background-color: #5b80b2;
+  border-radius: 10px 25px 10px 25px;
+  color: white;
+  margin: 10px;
+  width: 98.5%;
+}
+
+div[id="content"] {
+  align-self: center;
+  align-content: center;
+  background-color: #5b80b2;
+  border-radius: 10px 35px 10px 35px;
+  color: white;
+  margin: 10px;
+  padding: 20px;
+  width: 98.5%;
+}
+
+input[type="submit"] {
+  color: #000;
+}
