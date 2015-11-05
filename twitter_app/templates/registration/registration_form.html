@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if form.errors %}
-<p>{{ form.errors }}</p>
+<div class="alert alert-danger" role="alert"><p>{{ form.errors}}</p></div>
 {% endif %}
 
 <form method="post" action="{% url 'registration_register' %}">
@@ -13,7 +13,7 @@
     <input name="username" type="text" class="form-control" id="username_input" placeholder="Username">
   </div>
   <div class="form-group">
-    <label for="username_input">{{ form.email.label_tag }}</label>
+    <label for="email_input">{{ form.email.label_tag }}</label>
     <input name="email" type="email" class="form-control" id="email_input" placeholder="Email">
   </div>
   <div class="form-group">
