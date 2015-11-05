@@ -1,1 +1,13 @@
 {% extends "base.html" %}
+
+{% block content %}
+  {% if latest_posts_list %}
+    <ul>
+      {% for post in latest_posts_list %}
+        <li><a href="{% url 'index' %}">{{ post }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No polls are available.</p>
+  {% endif %}
+{% endblock content %}
