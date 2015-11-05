@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user_profile %}
+<h1><a href="{% url 'profile' pk=user_profile.pk %}">@{{ user_profile }}</a></h1>
+{% if user_profile.first_name %}
+<label for="first_name" class="col-sm-2 control-label">First name</label>
+<p id="first_name">{{ user_profile.first_name }}</p>
+{% endif %}
+{% if user_profile.last_name %}
+<label for="last_name" class="col-sm-2 control-label">Last name</label>
+<p id="last_name">{{ user_profile.last_name }}</p>
+{% endif %}
+<label for="email" class="col-sm-2 control-label">Email</label>
+<p id="email">{{ user_profile.email }}</p>
+{% else %}
+<p>User is unavailable.</p>
+{% endif %}
+{% endblock content %}

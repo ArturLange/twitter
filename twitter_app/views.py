@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.views import generic
 
-from twitter_app.models import Post
+from twitter_app.models import Post, User
 
 
 class IndexView(generic.ListView):
@@ -10,3 +10,9 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         return Post.objects.filter(date_created__lte=timezone.now()).order_by('-date_created')[:5]
+
+
+class UserProfileView(generic.DetailView):
+    model = User
+    template_name = 'twitter_app/profile.html'
+    context_object_name = 'user_profile'
