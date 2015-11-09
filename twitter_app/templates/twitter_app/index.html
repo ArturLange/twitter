@@ -6,8 +6,9 @@
 <ul class="posts">
   {% for post in latest_posts_list %}
   <li>
-    <div class="post">
+    <div class="well">
       <a class="post_creator" href="{% url 'profile' pk=post.creator.pk %}">{{ post.creator }}</a><br>
+
       <p class="post_content">{{ post.content }}</p>
     </div>
   </li>

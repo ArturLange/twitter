@@ -13,11 +13,11 @@ class IndexView(generic.ListView):
         return Post.objects.filter(date_created__lte=timezone.now()).order_by('-date_created')[:20]
 
 
-class UserProfileView(generic.DetailView):
+class UserProfileView(generic.View):
     template_name = 'twitter_app/profile.html'
 
     def get(self, request, pk):
         user = User.objects.get(id=pk)
-        posts = Post.objects.get_by_user_id(user.id)
+        posts = Post.objects.get_by_user_id(user.id).filter(date_created__lte=timezone.now()).order_by('-date_created')[:20]
         context = {'user_profile': user, 'posts': posts}
         return render(request, self.template_name, context)
