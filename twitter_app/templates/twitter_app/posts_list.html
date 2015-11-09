@@ -1,0 +1,15 @@
+<div class="posts-list">
+  <ul class="posts">
+    {% for post in posts %}
+    <li>
+      <div class="well">
+        <a class="post_creator" href="{% url 'profile' pk=post.creator.pk %}">{{ post.creator }}</a><br>
+
+        <p class="timestamp">{{ post.date_created }}</p>
+
+        <p class="post_content">{{ post.content }}</p>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

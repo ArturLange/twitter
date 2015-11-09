@@ -19,7 +19,7 @@ class PostManager(models.Manager):
 
 class Post(models.Model):
     content = models.TextField()
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(User)
     objects = PostManager()
 

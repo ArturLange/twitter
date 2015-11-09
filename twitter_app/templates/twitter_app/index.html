@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if latest_posts_list %}
 
-<ul class="posts">
-  {% for post in latest_posts_list %}
-  <li>
-    <div class="well">
-      <a class="post_creator" href="{% url 'profile' pk=post.creator.pk %}">{{ post.creator }}</a><br>
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'add_post' %}">
+  {% csrf_token %}
+  <div class="input-group post-status">
+    <input type="text" class="form-control" name="post_content" placeholder="Post something" rows="3">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Post</button>
+      </span>
+  </div><!-- /input-group -->
+</form>
+{% endif %}
 
-      <p class="post_content">{{ post.content }}</p>
-    </div>
-  </li>
-  {% endfor %}
-</ul>
+
+{% if posts %}
+{% include "twitter_app/posts_list.html" %}
 {% else %}
 <p>No posts are available.</p>
 {% endif %}

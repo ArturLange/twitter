@@ -12,6 +12,10 @@ a.post_creator {
   cursor: pointer;
 }
 
+.timestamp {
+  color: #999;
+}
+
 .post:hover {
   background-color: #f5f8fa;
 }
@@ -43,7 +47,7 @@ div[id="sidebar"] {
   width: 98.5%;
 }
 
-div[id="content"] {
+div.posts-list {
   background-color: #5b80b2;
   border-radius: 5px;
   margin: 10px;
