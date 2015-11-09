@@ -25,7 +25,8 @@
     <label for="password_input">{{ form.password.label_tag }}</label>
     <input name="password" type="password" class="form-control" id="password_input" placeholder="Password">
   </div>
-  <button type="submit" class="btn btn-default">Login</button>
+  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Login
+  </button>
   <input type="hidden" name="next" value="{% url 'index' %}"/>
 </form>
 
