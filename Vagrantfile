@@ -19,7 +19,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.network "private_network", ip: "192.168.50.4"
   end
 
-  config.vm.provider "lxc" do |v, override|
+  config.vm.provider "lxc" do |lxc, override|
+    lxc.customize "aa_allow_incomplete", 1
     override.vm.box = "fgrehm/trusty64-lxc"
     override.vm.network "forwarded_port", guest: 3456, host:3456
   end
