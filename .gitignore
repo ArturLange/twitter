@@ -140,3 +140,8 @@ pip-selfcheck.json
 *.pot
 __pycache__/
 local_settings.py
+
+### Sass ###
+.sass-cache/
+*.css.map
+*.css
