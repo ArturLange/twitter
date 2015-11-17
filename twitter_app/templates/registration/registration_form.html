@@ -2,31 +2,33 @@
 
 {% block content %}
 
-{% if form.errors %}
-<div class="alert alert-danger" role="alert"><p>{{ form.errors}}</p></div>
-{% endif %}
+  {% if form.errors %}
+    <div class="alert alert-danger" role="alert"><p>{{ form.errors }}</p></div>
+  {% endif %}
 
-<form method="post" action="{% url 'registration_register' %}">
-  {% csrf_token %}
-  <div class="form-group">
-    <label for="username_input">{{ form.username.label_tag }}</label>
-    <input name="username" type="text" class="form-control" id="username_input" placeholder="Username">
-  </div>
-  <div class="form-group">
-    <label for="email_input">{{ form.email.label_tag }}</label>
-    <input name="email" type="email" class="form-control" id="email_input" placeholder="Email">
-  </div>
-  <div class="form-group">
-    <label for="password1_input">{{ form.password1.label_tag }}</label>
-    <input name="password1" type="password" class="form-control" id="password1_input" placeholder="Password">
-  </div>
-  <div class="form-group">
-    <label for="password2_input">{{ form.password2.label_tag }}</label>
-    <input name="password2" type="password" class="form-control" id="password2_input" placeholder="Password">
-  </div>
-  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Register
-  </button>
-</form>
+  <form method="post" action="{% url 'registration_register' %}">
+    {% csrf_token %}
+    <div class="input-group">
+      <div class="form-group">
+        <label for="username_input">{{ form.username.label_tag }}</label>
+        <input name="username" type="text" class="form-control" id="username_input" placeholder="Username">
+      </div>
+      <div class="form-group">
+        <label for="email_input">{{ form.email.label_tag }}</label>
+        <input name="email" type="email" class="form-control" id="email_input" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label for="password1_input">{{ form.password1.label_tag }}</label>
+        <input name="password1" type="password" class="form-control" id="password1_input" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label for="password2_input">{{ form.password2.label_tag }}</label>
+        <input name="password2" type="password" class="form-control" id="password2_input" placeholder="Password">
+      </div><br><br>
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Register
+      </button>
+    </div>
+  </form>
 
 
-{% endblock content%}
+{% endblock content %}
